@@ -50,6 +50,15 @@ npm run e2e:ui            # Playwright's UI mode
 
 A Husky pre-commit hook runs `format:check`, `lint`, and `test` before every commit. GitHub Actions (`.github/workflows/ci.yml`) runs the same checks plus a full build and the e2e suite on push/PR.
 
+## Deploying
+
+`npm run dev` runs the frontend and the API on the same machine, which is fine locally but doesn't map onto Vercel directly — Vercel serves the static Vite build, but json-server is a persistent Node process, which Vercel's serverless model doesn't run. The two need to be deployed separately:
+
+1. **API.** Deploy json-server itself somewhere that keeps a Node process running — Render, Railway, Fly.io, etc. all work. Use `npm run start` as the start command; it reads the platform's `$PORT` instead of the hardcoded 3000 `npm run api` uses locally. Note the resulting URL (e.g. `https://your-api.onrender.com`).
+2. **Frontend.** On Vercel, set `VITE_API_BASE_URL` to that URL in the project's Environment Variables, then redeploy — Vite inlines env vars at build time, so just adding the variable doesn't affect an already-built deployment; it needs a fresh build to pick it up.
+
+Free tiers on these hosts commonly spin down after idling and cold-start (a few seconds' delay) on the next request — expected, not a bug, if the first load after a while feels slow.
+
 ## Choices
 
 - **Server state vs. client state.** Everything that comes from the API lives in TanStack Query; the wishlist is pure client state and lives in Zustand. No duplicate sources of truth.
