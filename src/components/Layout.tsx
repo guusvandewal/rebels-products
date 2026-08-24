@@ -118,16 +118,22 @@ function HeaderSearch() {
     return { value: initial, committedValue: initial, suggestionsOpen: false, activeIndex: -1 };
   });
 
+  // Deliberately omits state.committedValue: this should only react to the
+  // URL changing, using whatever committedValue is current at that point,
+  // not re-run every time committedValue itself changes.
   useEffect(() => {
     const urlQuery = searchParams.get('q') ?? '';
     if (urlQuery !== state.committedValue) {
       dispatch({ type: 'value-reset', value: urlQuery });
     }
-    // Deliberately omits state.committedValue: this should only react to
-    // the URL changing, using whatever committedValue is current at that
-    // point, not re-run every time committedValue itself changes.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
 
+  // Deliberately omits searchParams: this should only fire when we commit
+  // a new value ourselves, not on every URL change — including it would
+  // also catch the echo from our own navigate call below, which is
+  // exactly the typing-vs-navigate race described in the comment above
+  // this component.
   useEffect(() => {
     const trimmed = state.committedValue.trim();
     if (trimmed === (searchParams.get('q') ?? '')) return;
@@ -137,7 +143,8 @@ function HeaderSearch() {
     navigate(trimmed ? `/products?q=${encodeURIComponent(trimmed)}` : '/products', {
       replace: true,
     });
-  }, [state.committedValue]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.committedValue, navigate]);
 
   const suggestions = useMemo<Suggestion[]>(() => {
     const term = state.value.trim().toLowerCase();

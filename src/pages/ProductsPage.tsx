@@ -43,25 +43,34 @@ export function ProductsPage() {
   const { data: products, isPending, isError, isPlaceholderData } = useProducts(filters);
 
   // The search query is driven by the header search bar via the `q` URL
-  // param rather than a page-local input, so pick it up from there.
+  // param rather than a page-local input, so pick it up from there. Should
+  // only react to the URL changing, not to filters.query itself (which
+  // this effect also sets) — including it would re-run the check right
+  // after its own dispatch, which is harmless here but not the intent.
+  // dispatch is stable (useProductFilters wraps useReducer), just not
+  // provably so to the linter through that wrapper.
   useEffect(() => {
     const query = searchParams.get('q') ?? '';
     if (query !== filters.query) {
       dispatch({ type: 'query-changed', query });
     }
-  }, [searchParams]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams, dispatch]);
 
   // Category can also arrive via the URL (e.g. a product page's breadcrumb
-  // linking back to its category), so pick it up the same way.
+  // linking back to its category), so pick it up the same way. Same
+  // reasoning as the query effect above for omitting filters.category.
   useEffect(() => {
     const category = searchParams.get('category');
     if (category !== filters.category) {
       dispatch({ type: 'category-changed', category });
     }
-  }, [searchParams]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams, dispatch]);
 
   // Brand (possibly several, one per repeated `brand=` param) can also
   // arrive via the URL, e.g. from the header search's brand suggestions.
+  // Same reasoning as the two effects above for omitting filters.brand.
   useEffect(() => {
     const brand = searchParams.getAll('brand');
     const same =
@@ -69,7 +78,8 @@ export function ProductsPage() {
     if (!same) {
       dispatch({ type: 'brand-selection-changed', brand });
     }
-  }, [searchParams]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams, dispatch]);
 
   // A text search that resolves to results sharing one category and/or
   // brand (e.g. a specific product) also selects that category/brand, so
@@ -100,7 +110,7 @@ export function ProductsPage() {
       }
       return next;
     });
-  }, [products, isPending, isPlaceholderData, filters.query]);
+  }, [products, isPending, isPlaceholderData, filters.query, dispatch, setSearchParams]);
 
   const categories = useMemo(
     () => [...new Set(allProducts?.map((product) => product.category))].sort(),
@@ -123,15 +133,16 @@ export function ProductsPage() {
 
   // Narrowing the category can drop brands from the option list above; drop
   // them from the actual filter too, so a hidden chip can't keep silently
-  // filtering out every result.
+  // filtering out every result. Intentionally re-checks only when the
+  // available brand list (i.e. the category) changes, not on every brand
+  // selection, hence omitting filters.brand.
   useEffect(() => {
     const stillValid = filters.brand.filter((brand) => brands.includes(brand));
     if (stillValid.length !== filters.brand.length) {
       dispatch({ type: 'brand-selection-changed', brand: stillValid });
     }
-    // Intentionally re-checks only when the available brand list (i.e. the
-    // category) changes, not on every brand selection.
-  }, [brands]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [brands, dispatch]);
 
   const resultsCount = products?.length ?? 0;
   const resultsLabel = filters.query
