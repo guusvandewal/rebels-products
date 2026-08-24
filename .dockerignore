@@ -1,0 +1,21 @@
+# dependencies
+node_modules
+
+# build output
+dist
+dist-ssr
+
+# env files
+.env
+.env.*
+!.env.example
+
+# testing / e2e artifacts
+test-results
+playwright-report
+playwright/.cache
+coverage
+
+# editor / OS
+.DS_Store
+*.local
