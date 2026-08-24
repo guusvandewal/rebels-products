@@ -22,7 +22,7 @@ export function WishlistPage() {
             <p>
               {isEmpty
                 ? 'Still empty. Tap the heart on a product to save it.'
-                : `${productIds.length} product${productIds.length === 1 ? '' : 's'} saved, stored locally in your browser.`}
+                : `${productIds.length} product${productIds.length === 1 ? '' : 's'} saved`}
             </p>
           </div>
         </div>
@@ -33,7 +33,7 @@ export function WishlistPage() {
           {isEmpty ? (
             <div className="empty-state">
               <h2>Nothing saved</h2>
-              <p>Find something nice and save it here, just like on Coolblue.</p>
+              <p>Find something nice and save it here</p>
               <Link className="pill-button" to="/products">
                 View products
               </Link>
