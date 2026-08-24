@@ -261,7 +261,8 @@ function HeaderSearch() {
                 suggestion.kind === 'product'
                   ? `product-${suggestion.product.id}`
                   : `${suggestion.kind}-${suggestion.name}`;
-              const label = suggestion.kind === 'product' ? suggestion.product.name : suggestion.name;
+              const label =
+                suggestion.kind === 'product' ? suggestion.product.name : suggestion.name;
               return (
                 <li
                   key={key}
