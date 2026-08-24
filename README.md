@@ -33,7 +33,7 @@ npm run dev
 
 ### Environment variables
 
-See `.env.example`. `VITE_API_BASE_URL` is required (defaults to the local json-server). `VITE_UNSPLASH_ACCESS_KEY` is optional — without it, product images fall back to a branded placeholder tile instead of a real photo (see "Choices" below).
+See `.env.example`. `VITE_API_BASE_URL` is required (defaults to the local json-server). `VITE_UNSPLASH_ACCESS_KEY` is optionalad — without it, product images fall back to a branded placeholder tile instead of a real photo (see "Choices" below).
 
 Other scripts:
 
