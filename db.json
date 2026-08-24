@@ -1,0 +1,266 @@
+{
+  "products": [
+    {
+      "id": 1,
+      "name": "High-Performance Laptop",
+      "brand": "TechTron",
+      "category": "Electronics",
+      "image": "https://source.unsplash.com/random/600x600?laptop",
+      "specifications": {
+        "processor": "Intel i7",
+        "ram": "16GB",
+        "storage": "512GB SSD"
+      }
+    },
+    {
+      "id": 2,
+      "name": "Gaming Mouse",
+      "brand": "GamerGadgets",
+      "category": "Accessories",
+      "image": "https://source.unsplash.com/random/600x600?gaming-mouse",
+      "specifications": {
+        "dpi": "12000",
+        "buttons": "8",
+        "lighting": "RGB"
+      }
+    },
+    {
+      "id": 3,
+      "name": "Bluetooth Headphones",
+      "brand": "SoundWave",
+      "category": "Audio",
+      "image": "https://source.unsplash.com/random/600x600?headphones",
+      "specifications": {
+        "batteryLife": "20 hours",
+        "noiseCancelling": "Yes",
+        "connectivity": "Bluetooth 5.0"
+      }
+    },
+    {
+      "id": 4,
+      "name": "4K Monitor",
+      "brand": "DisplayPro",
+      "category": "Electronics",
+      "image": "https://source.unsplash.com/random/600x600?4k-monitor",
+      "specifications": {
+        "resolution": "3840x2160",
+        "refreshRate": "60Hz",
+        "panelType": "IPS"
+      }
+    },
+    {
+      "id": 5,
+      "name": "Gaming Keyboard",
+      "brand": "GamerGadgets",
+      "category": "Accessories",
+      "image": "https://source.unsplash.com/random/600x600?keyboard",
+      "specifications": {
+        "keys": "Mechanical",
+        "backlight": "RGB",
+        "connectivity": "Wired"
+      }
+    },
+    {
+      "id": 6,
+      "name": "Wireless Speaker",
+      "brand": "SoundWave",
+      "category": "Audio",
+      "image": "https://source.unsplash.com/random/600x600?speaker",
+      "specifications": {
+        "batteryLife": "15 hours",
+        "output": "20W",
+        "connectivity": "Bluetooth 5.0"
+      }
+    },
+    {
+      "id": 7,
+      "name": "Smartwatch",
+      "brand": "TechTron",
+      "category": "Wearables",
+      "image": "https://source.unsplash.com/random/600x600?smartwatch",
+      "specifications": {
+        "display": "AMOLED",
+        "batteryLife": "24 hours",
+        "connectivity": "Bluetooth 5.0"
+      }
+    },
+    {
+      "id": 8,
+      "name": "Tablet",
+      "brand": "TechTron",
+      "category": "Electronics",
+      "image": "https://source.unsplash.com/random/600x600?tablet",
+      "specifications": {
+        "display": "10 inch",
+        "storage": "128GB",
+        "connectivity": "Wi-Fi"
+      }
+    },
+    {
+      "id": 9,
+      "name": "USB Microphone",
+      "brand": "SoundWave",
+      "category": "Audio",
+      "image": "https://source.unsplash.com/random/600x600?microphone",
+      "specifications": {
+        "frequencyResponse": "20Hz-20kHz",
+        "connectivity": "USB",
+        "polarPattern": "Cardioid"
+      }
+    },
+    {
+      "id": 10,
+      "name": "External Hard Drive",
+      "brand": "StoragePlus",
+      "category": "Accessories",
+      "image": "https://source.unsplash.com/random/600x600?harddrive",
+      "specifications": {
+        "capacity": "1TB",
+        "connectivity": "USB 3.0",
+        "type": "HDD"
+      }
+    },
+    {
+      "id": 11,
+      "name": "Ergonomic Chair",
+      "brand": "ComfortSeating",
+      "category": "Furniture",
+      "image": "https://source.unsplash.com/random/600x600?chair",
+      "specifications": {
+        "material": "Mesh",
+        "maxWeight": "300 lbs",
+        "adjustableHeight": "Yes"
+      }
+    },
+    {
+      "id": 12,
+      "name": "Desk Lamp",
+      "brand": "BrightLight",
+      "category": "Lighting",
+      "image": "https://source.unsplash.com/random/600x600?lamp",
+      "specifications": {
+        "brightness": "800 lumens",
+        "colorTemperature": "3000K",
+        "adjustableHeight": "Yes"
+      }
+    },
+    {
+      "id": 13,
+      "name": "Wireless Charger",
+      "brand": "ChargePro",
+      "category": "Accessories",
+      "image": "https://source.unsplash.com/random/600x600?charger",
+      "specifications": {
+        "input": "USB-C",
+        "output": "15W",
+        "compatibility": "Qi"
+      }
+    },
+    {
+      "id": 14,
+      "name": "Fitness Tracker",
+      "brand": "HealthFirst",
+      "category": "Wearables",
+      "image": "https://source.unsplash.com/random/600x600?fitness-tracker",
+      "specifications": {
+        "batteryLife": "7 days",
+        "sensors": "Heart Rate, GPS",
+        "waterResistance": "50m"
+      }
+    },
+    {
+      "id": 15,
+      "name": "Portable Projector",
+      "brand": "CinemaTech",
+      "category": "Electronics",
+      "image": "https://source.unsplash.com/random/600x600?projector",
+      "specifications": {
+        "resolution": "1080p",
+        "brightness": "3000 lumens",
+        "connectivity": "HDMI, USB"
+      }
+    },
+    {
+      "id": 16,
+      "name": "Action Camera",
+      "brand": "AdventureCam",
+      "category": "Photography",
+      "image": "https://source.unsplash.com/random/600x600?action-camera",
+      "specifications": {
+        "resolution": "4K",
+        "frameRate": "60 fps",
+        "waterResistance": "30m"
+      }
+    },
+    {
+      "id": 17,
+      "name": "Digital Drawing Tablet",
+      "brand": "ArtistryTech",
+      "category": "Accessories",
+      "image": "https://source.unsplash.com/random/600x600?drawing-tablet",
+      "specifications": {
+        "activeArea": "10x6 inches",
+        "pressureLevels": "8192",
+        "connectivity": "USB"
+      }
+    },
+    {
+      "id": 18,
+      "name": "3D Printer",
+      "brand": "PrintTech",
+      "category": "Electronics",
+      "image": "https://source.unsplash.com/random/600x600?3d-printer",
+      "specifications": {
+        "printVolume": "220x220x250mm",
+        "layerResolution": "0.1mm",
+        "connectivity": "SD Card, USB"
+      }
+    },
+    {
+      "id": 19,
+      "name": "Robot Vacuum",
+      "brand": "CleanBot",
+      "category": "Home Appliances",
+      "image": "https://source.unsplash.com/random/600x600?robot-vacuum",
+      "specifications": {
+        "batteryLife": "150 minutes",
+        "suctionPower": "2000Pa",
+        "connectivity": "Wi-Fi"
+      }
+    },
+    {
+      "id": 20,
+      "name": "Espresso Machine",
+      "brand": "CoffeePro",
+      "category": "Kitchen Appliances",
+      "image": "https://source.unsplash.com/random/600x600?espresso-machine",
+      "specifications": {
+        "capacity": "2 cups",
+        "pressure": "15 bar",
+        "milkFrother": "Yes"
+      }
+    }
+  ],
+  "wishlists": [
+    {
+      "id": 1,
+      "name": "Tech Wishlist",
+      "products": [1, 2, 3, 4, 5]
+    },
+    {
+      "id": 2,
+      "name": "Audio Gear",
+      "products": [6, 7, 8, 9, 10]
+    },
+    {
+      "id": 3,
+      "name": "Gaming Essentials",
+      "products": [11, 12, 13, 14, 15]
+    },
+    {
+      "id": 4,
+      "name": "Home and Office",
+      "products": [16, 17, 18, 19, 20]
+    }
+  ]
+}
