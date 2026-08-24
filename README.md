@@ -2,6 +2,8 @@
 
 FE assignment: product overview, search, detail page, and a Coolblue-like wishlist, in the rebels.io house style.
 
+![Products page](src/assets/products.png)
+
 ## Stack
 
 - React 18 + TypeScript + Vite 7

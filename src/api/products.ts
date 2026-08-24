@@ -2,7 +2,7 @@ import { useQuery, keepPreviousData } from '@tanstack/react-query';
 import { z } from 'zod';
 import type { FiltersState } from '../hooks/useProductFilters';
 
-const API_URL = import.meta.env.VITE_API_BASE_URL;
+const API_URL = import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:3000';
 
 export const productSchema = z.object({
   id: z.number(),
