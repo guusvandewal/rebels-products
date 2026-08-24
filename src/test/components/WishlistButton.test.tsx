@@ -21,7 +21,12 @@ describe('WishlistButton', () => {
     const user = userEvent.setup();
     render(
       <WishlistButton
-        product={{ id: 1, name: 'High-Performance Laptop', brand: 'TechTron', category: 'Electronics' }}
+        product={{
+          id: 1,
+          name: 'High-Performance Laptop',
+          brand: 'TechTron',
+          category: 'Electronics',
+        }}
       />,
     );
 
@@ -49,7 +54,12 @@ describe('WishlistButton', () => {
     const user = userEvent.setup();
     render(
       <WishlistButton
-        product={{ id: 2, name: 'Espresso Machine', brand: 'CoffeePro', category: 'Kitchen Appliances' }}
+        product={{
+          id: 2,
+          name: 'Espresso Machine',
+          brand: 'CoffeePro',
+          category: 'Kitchen Appliances',
+        }}
         variant="full"
       />,
     );
