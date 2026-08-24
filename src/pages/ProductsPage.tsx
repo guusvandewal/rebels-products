@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import Select from 'react-select';
 import { useAllProducts, useProducts } from '../api/products';
@@ -70,6 +70,37 @@ export function ProductsPage() {
       dispatch({ type: 'brand-selection-changed', brand });
     }
   }, [searchParams]);
+
+  // A text search that resolves to results sharing one category and/or
+  // brand (e.g. a specific product) also selects that category/brand, so
+  // the filters reflect what you searched for, not just the query text.
+  // Runs once per distinct query — a manual category/brand change after
+  // that isn't fought on the next render, since the ref already matches.
+  const autoFilteredQueryRef = useRef<string | null>(null);
+  useEffect(() => {
+    if (isPending || isPlaceholderData || !filters.query) return;
+    if (autoFilteredQueryRef.current === filters.query) return;
+    autoFilteredQueryRef.current = filters.query;
+    if (!products || products.length === 0) return;
+
+    const uniqueCategories = new Set(products.map((product) => product.category));
+    const uniqueBrands = new Set(products.map((product) => product.brand));
+    const derivedCategory = uniqueCategories.size === 1 ? [...uniqueCategories][0] : null;
+    const derivedBrand = uniqueBrands.size === 1 ? [...uniqueBrands][0] : null;
+    if (!derivedCategory && !derivedBrand) return;
+
+    if (derivedCategory) dispatch({ type: 'category-changed', category: derivedCategory });
+    if (derivedBrand) dispatch({ type: 'brand-selection-changed', brand: [derivedBrand] });
+    setSearchParams((prev) => {
+      const next = new URLSearchParams(prev);
+      if (derivedCategory) next.set('category', derivedCategory);
+      if (derivedBrand) {
+        next.delete('brand');
+        next.append('brand', derivedBrand);
+      }
+      return next;
+    });
+  }, [products, isPending, isPlaceholderData, filters.query]);
 
   const categories = useMemo(
     () => [...new Set(allProducts?.map((product) => product.category))].sort(),
