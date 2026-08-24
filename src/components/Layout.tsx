@@ -98,7 +98,7 @@ function SearchIcon() {
  * its exact name and submitting).
  *
  * Text search runs through the reducer's `value` -> `value-committed` ->
- * `committedValue` transition, which a effect turns into a navigate to
+ * `committedValue` transition, which an effect turns into a navigate to
  * `/products?q=<term>`. Category/brand picks navigate directly instead
  * (`value-cleared` resets the typed text without touching `committedValue`,
  * so that navigate-on-commit effect doesn't also fire and fight it).
@@ -135,21 +135,48 @@ function HeaderSearch() {
     });
   }, [state.committedValue]);
 
-  const suggestions = useMemo(() => {
+  const suggestions = useMemo<Suggestion[]>(() => {
     const term = state.value.trim().toLowerCase();
     if (!term) return [];
-    return (allProducts ?? [])
+    const products = allProducts ?? [];
+
+    const categorySuggestions: Suggestion[] = [...new Set(products.map((p) => p.category))]
+      .filter((name) => name.toLowerCase().includes(term))
+      .slice(0, MAX_TAXONOMY_SUGGESTIONS)
+      .map((name) => ({ kind: 'category', name }));
+
+    const brandSuggestions: Suggestion[] = [...new Set(products.map((p) => p.brand))]
+      .filter((name) => name.toLowerCase().includes(term))
+      .slice(0, MAX_TAXONOMY_SUGGESTIONS)
+      .map((name) => ({ kind: 'brand', name }));
+
+    const remainingSlots = MAX_SUGGESTIONS - categorySuggestions.length - brandSuggestions.length;
+    const productSuggestions: Suggestion[] = products
       .filter((product) => product.name.toLowerCase().includes(term))
-      .slice(0, MAX_SUGGESTIONS);
+      .slice(0, Math.max(remainingSlots, 0))
+      .map((product) => ({ kind: 'product', product }));
+
+    return [...categorySuggestions, ...brandSuggestions, ...productSuggestions];
   }, [allProducts, state.value]);
 
   const showSuggestions = state.suggestionsOpen && suggestions.length > 0;
 
-  // Picking a suggestion searches for it in the listing, same as typing
-  // the exact name and submitting — it never jumps straight to that
-  // product's detail page.
-  function selectSuggestion(product: Product) {
-    dispatch({ type: 'value-reset', value: product.name });
+  function selectSuggestion(suggestion: Suggestion) {
+    switch (suggestion.kind) {
+      case 'category':
+        dispatch({ type: 'value-cleared' });
+        navigate(`/products?category=${encodeURIComponent(suggestion.name)}`);
+        break;
+      case 'brand':
+        dispatch({ type: 'value-cleared' });
+        navigate(`/products?brand=${encodeURIComponent(suggestion.name)}`);
+        break;
+      case 'product':
+        // Searches for it in the listing, same as typing the exact name
+        // and submitting — never jumps straight to its detail page.
+        dispatch({ type: 'value-reset', value: suggestion.product.name });
+        break;
+    }
   }
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -223,25 +250,37 @@ function HeaderSearch() {
             id="header-search-listbox"
             className="header-search__suggestions"
             role="listbox"
-            aria-label="Product suggestions"
+            aria-label="Search suggestions"
           >
-            {suggestions.map((product, index) => (
-              <li
-                key={product.id}
-                id={`header-search-option-${index}`}
-                role="option"
-                aria-selected={index === state.activeIndex}
-                className={
-                  index === state.activeIndex
-                    ? 'header-search__option header-search__option--active'
-                    : 'header-search__option'
-                }
-                onMouseDown={(event) => event.preventDefault()}
-                onClick={() => selectSuggestion(product)}
-              >
-                {product.name}
-              </li>
-            ))}
+            {suggestions.map((suggestion, index) => {
+              const key =
+                suggestion.kind === 'product'
+                  ? `product-${suggestion.product.id}`
+                  : `${suggestion.kind}-${suggestion.name}`;
+              const label = suggestion.kind === 'product' ? suggestion.product.name : suggestion.name;
+              return (
+                <li
+                  key={key}
+                  id={`header-search-option-${index}`}
+                  role="option"
+                  aria-selected={index === state.activeIndex}
+                  className={
+                    index === state.activeIndex
+                      ? 'header-search__option header-search__option--active'
+                      : 'header-search__option'
+                  }
+                  onMouseDown={(event) => event.preventDefault()}
+                  onClick={() => selectSuggestion(suggestion)}
+                >
+                  <span className="header-search__option-label">{label}</span>
+                  {suggestion.kind !== 'product' && (
+                    <span className="header-search__option-meta">
+                      {suggestion.kind === 'category' ? 'Category' : 'Brand'}
+                    </span>
+                  )}
+                </li>
+              );
+            })}
           </ul>
         )}
       </div>
