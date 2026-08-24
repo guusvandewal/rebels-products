@@ -19,7 +19,11 @@ describe('WishlistButton', () => {
   // (the product grid and wishlist page both read from it).
   it('adds and removes a product from the wishlist', async () => {
     const user = userEvent.setup();
-    render(<WishlistButton productId={1} productName="High-Performance Laptop" />);
+    render(
+      <WishlistButton
+        product={{ id: 1, name: 'High-Performance Laptop', brand: 'TechTron', category: 'Electronics' }}
+      />,
+    );
 
     const addButton = screen.getByRole('button', {
       name: 'Add High-Performance Laptop to wishlist',
@@ -43,7 +47,12 @@ describe('WishlistButton', () => {
   // toggling still work under that branch.
   it('renders a labeled button for the full variant', async () => {
     const user = userEvent.setup();
-    render(<WishlistButton productId={2} productName="Espresso Machine" variant="full" />);
+    render(
+      <WishlistButton
+        product={{ id: 2, name: 'Espresso Machine', brand: 'CoffeePro', category: 'Kitchen Appliances' }}
+        variant="full"
+      />,
+    );
 
     const button = screen.getByRole('button', { name: /add to wishlist/i });
     await user.click(button);
