@@ -1,3 +1,5 @@
+import type { Product } from '../api/products';
+import { trackWishlistAdd, trackWishlistRemove } from '../lib/analytics';
 import { useIsWishlisted, useWishlistStore } from '../stores/wishlist';
 
 function HeartIcon({ filled }: { filled: boolean }) {
@@ -15,25 +17,33 @@ function HeartIcon({ filled }: { filled: boolean }) {
 }
 
 interface WishlistButtonProps {
-  productId: number;
-  productName: string;
+  product: Pick<Product, 'id' | 'name' | 'brand' | 'category'>;
   variant?: 'icon' | 'full';
 }
 
-export function WishlistButton({ productId, productName, variant = 'icon' }: WishlistButtonProps) {
-  const isWishlisted = useIsWishlisted(productId);
+export function WishlistButton({ product, variant = 'icon' }: WishlistButtonProps) {
+  const isWishlisted = useIsWishlisted(product.id);
   const toggle = useWishlistStore((state) => state.toggle);
 
+  function handleToggle() {
+    if (isWishlisted) {
+      trackWishlistRemove(product);
+    } else {
+      trackWishlistAdd(product);
+    }
+    toggle(product.id);
+  }
+
   const label = isWishlisted
-    ? `Remove ${productName} from wishlist`
-    : `Add ${productName} to wishlist`;
+    ? `Remove ${product.name} from wishlist`
+    : `Add ${product.name} to wishlist`;
 
   if (variant === 'full') {
     return (
       <button
         type="button"
         className={isWishlisted ? 'pill-button pill-button--active' : 'pill-button'}
-        onClick={() => toggle(productId)}
+        onClick={handleToggle}
         aria-pressed={isWishlisted}
       >
         <HeartIcon filled={isWishlisted} />
@@ -50,7 +60,7 @@ export function WishlistButton({ productId, productName, variant = 'icon' }: Wis
         // The card itself is a link, keep the click on the button.
         event.preventDefault();
         event.stopPropagation();
-        toggle(productId);
+        handleToggle();
       }}
       aria-pressed={isWishlisted}
       aria-label={label}
