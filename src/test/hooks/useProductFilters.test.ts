@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { filtersReducer, hasActiveFilters, initialFilters } from './useProductFilters';
+import { filtersReducer, hasActiveFilters, initialFilters } from '../../hooks/useProductFilters';
 
 describe('filtersReducer', () => {
   it('sets the query on query-changed', () => {
