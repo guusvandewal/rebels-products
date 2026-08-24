@@ -9,6 +9,7 @@ import {
 } from 'react';
 import { NavLink, Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAllProducts, type Product } from '../api/products';
+import { trackSearch } from '../lib/analytics';
 import { useWishlistCount } from '../stores/wishlist';
 import logoSrc from '../assets/logo.png';
 
@@ -130,6 +131,9 @@ function HeaderSearch() {
   useEffect(() => {
     const trimmed = state.committedValue.trim();
     if (trimmed === (searchParams.get('q') ?? '')) return;
+    if (trimmed) {
+      trackSearch(trimmed);
+    }
     navigate(trimmed ? `/products?q=${encodeURIComponent(trimmed)}` : '/products', {
       replace: true,
     });

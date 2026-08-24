@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useProductsByIds } from '../api/products';
 import { ProductImage } from '../components/ProductImage';
+import { trackProductClick, trackWishlistRemove } from '../lib/analytics';
 import { useWishlistStore } from '../stores/wishlist';
 
 export function WishlistPage() {
@@ -53,12 +54,20 @@ export function WishlistPage() {
               <ul className="wishlist">
                 {products?.map((product) => (
                   <li className="wishlist__row" key={product.id}>
-                    <Link to={`/products/${product.id}`} className="wishlist__media">
+                    <Link
+                      to={`/products/${product.id}`}
+                      className="wishlist__media"
+                      onClick={() => trackProductClick(product)}
+                    >
                       <ProductImage product={product} />
                     </Link>
                     <div className="wishlist__info">
                       <p className="card__brand">{product.brand}</p>
-                      <Link to={`/products/${product.id}`} className="wishlist__name">
+                      <Link
+                        to={`/products/${product.id}`}
+                        className="wishlist__name"
+                        onClick={() => trackProductClick(product)}
+                      >
                         {product.name}
                       </Link>
                       <p className="card__category">{product.category}</p>
@@ -66,7 +75,10 @@ export function WishlistPage() {
                     <button
                       type="button"
                       className="text-button text-button--danger"
-                      onClick={() => remove(product.id)}
+                      onClick={() => {
+                        trackWishlistRemove(product);
+                        remove(product.id);
+                      }}
                     >
                       Remove
                     </button>

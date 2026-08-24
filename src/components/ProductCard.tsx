@@ -1,15 +1,20 @@
 import { Link } from 'react-router-dom';
 import type { Product } from '../api/products';
+import { trackProductClick } from '../lib/analytics';
 import { ProductImage } from './ProductImage';
 import { WishlistButton } from './WishlistButton';
 
 export function ProductCard({ product }: { product: Product }) {
   return (
     <article className="card">
-      <Link to={`/products/${product.id}`} className="card__link">
+      <Link
+        to={`/products/${product.id}`}
+        className="card__link"
+        onClick={() => trackProductClick(product)}
+      >
         <div className="card__media">
           <ProductImage product={product} />
-          <WishlistButton productId={product.id} productName={product.name} />
+          <WishlistButton product={product} />
         </div>
         <div className="card__body">
           <p className="card__brand">{product.brand}</p>
