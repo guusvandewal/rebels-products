@@ -263,11 +263,10 @@ button {
   background: var(--pink);
   color: var(--white);
   border-radius: 100%;
-  aspect-ratio: 1 / 1;
   min-width: 1.4em;
-  height: 1.4em;
   font-size: 0.72rem;
-  padding: 0 0.35em;
+  padding: 0;
+  text-align: center;
 }
 
 .site-footer {
@@ -1005,7 +1004,6 @@ button {
   .filters__label {
     width: 100%;
   }
-
 }
 
 @media (max-width: 630px) {
