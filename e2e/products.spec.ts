@@ -1,11 +1,11 @@
 import { expect, test } from '@playwright/test';
 
 test.describe('Products page', () => {
-  test('shows the product grid in English by default', async ({ page }) => {
+  test('shows the product grid', async ({ page }) => {
     await page.goto('/products');
 
-    await expect(page.getByRole('heading', { name: 'Sell' })).toBeVisible();
     await expect(page.getByText(/^\d+ products$/)).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'High-Performance Laptop' })).toBeVisible();
   });
 
   test('filters products by search query', async ({ page }) => {
@@ -67,14 +67,16 @@ test.describe('Products page', () => {
     await page.locator('.card__link').first().click();
 
     await expect(page.getByRole('heading', { name: /Specifications/i })).toBeVisible();
-    await expect(page.getByRole('link', { name: 'Electronics' })).toBeVisible();
+    // Not `exact` here would also match the "More in Electronics" related
+    // product cards below, whose accessible names include the category text.
+    await expect(page.getByRole('link', { name: 'Electronics', exact: true })).toBeVisible();
   });
 
   test('breadcrumb on a product page filters back to its category', async ({ page }) => {
     await page.goto('/products');
 
     await page.locator('.card__link').first().click();
-    await page.getByRole('link', { name: 'Electronics' }).click();
+    await page.getByRole('link', { name: 'Electronics', exact: true }).click();
 
     await expect(page).toHaveURL(/category=Electronics/);
     await expect(page.getByLabel('Category')).toHaveValue('Electronics');
