@@ -153,7 +153,12 @@ export function ProductsPage() {
                 value={filters.category ?? ''}
                 onChange={(event) => {
                   const category = event.target.value || null;
+                  // Switching category by hand makes any active text search
+                  // stale (it may no longer match anything in the new
+                  // category), so drop it rather than leave a silently
+                  // contradictory combination.
                   dispatch({ type: 'category-changed', category });
+                  dispatch({ type: 'query-changed', query: '' });
                   setSearchParams((prev) => {
                     const next = new URLSearchParams(prev);
                     if (category) {
@@ -161,6 +166,7 @@ export function ProductsPage() {
                     } else {
                       next.delete('category');
                     }
+                    next.delete('q');
                     return next;
                   });
                 }}

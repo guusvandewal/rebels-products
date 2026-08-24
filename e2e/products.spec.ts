@@ -29,6 +29,20 @@ test.describe('Products page', () => {
     await expect(page.getByText('Gaming Mouse')).toBeVisible();
   });
 
+  test('changing category resets an active search', async ({ page }) => {
+    await page.goto('/products');
+
+    await page.getByPlaceholder('What are you looking for?').fill('laptop');
+    await page.getByRole('button', { name: 'Search' }).click();
+    await expect(page).toHaveURL(/q=laptop/);
+
+    await page.getByLabel('Category').selectOption('Audio');
+
+    await expect(page).not.toHaveURL(/q=laptop/);
+    await expect(page.getByPlaceholder('What are you looking for?')).toHaveValue('');
+    await expect(page.getByText('Bluetooth Headphones')).toBeVisible();
+  });
+
   test('filters products by selecting multiple brands', async ({ page }) => {
     await page.goto('/products');
 
