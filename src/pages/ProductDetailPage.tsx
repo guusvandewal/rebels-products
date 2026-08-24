@@ -83,7 +83,7 @@ export function ProductDetailPage() {
                     </div>
                   ))}
                 </dl>
-                <WishlistButton productId={product.id} productName={product.name} variant="full" />
+                <WishlistButton product={product} variant="full" />
               </div>
             </div>
           )}
