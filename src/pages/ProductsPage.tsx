@@ -3,6 +3,7 @@ import { useSearchParams } from 'react-router-dom';
 import Select from 'react-select';
 import { useAllProducts, useProducts } from '../api/products';
 import { ProductCard } from '../components/ProductCard';
+import { useDocumentTitle } from '../hooks/useDocumentTitle';
 import { hasActiveFilters, useProductFilters } from '../hooks/useProductFilters';
 
 interface BrandOption {
@@ -149,10 +150,13 @@ export function ProductsPage() {
     ? `${resultsCount} result${resultsCount === 1 ? '' : 's'} found for "${filters.query}"`
     : `${resultsCount} product${resultsCount === 1 ? '' : 's'}`;
 
+  useDocumentTitle(filters.query ? `Search: ${filters.query}` : 'Products');
+
   return (
     <>
       <section className="section">
         <div className="section__inner">
+          <h1 className="visually-hidden">Products</h1>
           <div className="filters">
             <div className="filters__group">
               <label className="filters__label" htmlFor="category-select">
@@ -237,7 +241,8 @@ export function ProductsPage() {
                   });
                 }}
               >
-                Clear filters X
+                Clear filters
+                <span aria-hidden="true"> ✕</span>
               </button>
             )}
           </div>

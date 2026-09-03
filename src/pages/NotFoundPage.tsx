@@ -1,6 +1,9 @@
 import { Link } from 'react-router-dom';
+import { useDocumentTitle } from '../hooks/useDocumentTitle';
 
 export function NotFoundPage() {
+  useDocumentTitle('Page not found');
+
   return (
     <>
       <section className="hero hero--compact">

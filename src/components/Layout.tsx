@@ -2,12 +2,14 @@ import {
   useEffect,
   useMemo,
   useReducer,
+  useRef,
+  useState,
   type FocusEvent,
   type FormEvent,
   type KeyboardEvent,
   type ReactNode,
 } from 'react';
-import { NavLink, Link, useNavigate, useSearchParams } from 'react-router-dom';
+import { NavLink, Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAllProducts, type Product } from '../api/products';
 import { trackSearch } from '../lib/analytics';
 import { useWishlistCount } from '../stores/wishlist';
@@ -305,9 +307,43 @@ function HeaderSearch() {
 
 export function Layout({ children }: { children: ReactNode }) {
   const wishlistCount = useWishlistCount();
+  const mainRef = useRef<HTMLElement>(null);
+  const { pathname } = useLocation();
+  const isFirstRender = useRef(true);
+  const [routeAnnouncement, setRouteAnnouncement] = useState('');
+
+  // On a client-side page change, browsers don't move focus or tell
+  // assistive tech anything — focus is left on a now-unmounted element and
+  // Tab restarts from the top of the document. Move focus to <main> so
+  // keyboard users carry on from the new content (WCAG 2.4.3), and mirror
+  // the fresh document title into a live region so screen readers announce
+  // the change. Skips the initial render, where nothing has changed yet.
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+    mainRef.current?.focus();
+    try {
+      window.scrollTo({ top: 0 });
+    } catch {
+      /* not implemented in some test environments */
+    }
+    setRouteAnnouncement(document.title);
+  }, [pathname]);
 
   return (
     <div className="layout">
+      <a
+        href="#main-content"
+        className="skip-link"
+        onClick={(event) => {
+          event.preventDefault();
+          mainRef.current?.focus();
+        }}
+      >
+        Skip to main content
+      </a>
       <header className="site-header">
         <Logo />
         <HeaderSearch />
@@ -329,7 +365,13 @@ export function Layout({ children }: { children: ReactNode }) {
         </nav>
       </header>
 
-      <main>{children}</main>
+      <main id="main-content" ref={mainRef} tabIndex={-1}>
+        {children}
+      </main>
+
+      <div className="visually-hidden" aria-live="polite">
+        {routeAnnouncement}
+      </div>
 
       <footer className="site-footer">
         <span>Thinkers. Doers. Rebels.</span>

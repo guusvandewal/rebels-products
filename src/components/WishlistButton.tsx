@@ -56,12 +56,7 @@ export function WishlistButton({ product, variant = 'icon' }: WishlistButtonProp
     <button
       type="button"
       className={isWishlisted ? 'heart-button heart-button--active' : 'heart-button'}
-      onClick={(event) => {
-        // The card itself is a link, keep the click on the button.
-        event.preventDefault();
-        event.stopPropagation();
-        handleToggle();
-      }}
+      onClick={handleToggle}
       aria-pressed={isWishlisted}
       aria-label={label}
       title={label}

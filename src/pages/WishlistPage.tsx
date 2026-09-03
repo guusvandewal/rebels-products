@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useProductsByIds } from '../api/products';
 import { ProductImage } from '../components/ProductImage';
+import { useDocumentTitle } from '../hooks/useDocumentTitle';
 import { trackProductClick, trackWishlistRemove } from '../lib/analytics';
 import { useWishlistStore } from '../stores/wishlist';
 
@@ -9,6 +10,8 @@ export function WishlistPage() {
   const remove = useWishlistStore((state) => state.remove);
   const clear = useWishlistStore((state) => state.clear);
   const { data: products, isPending } = useProductsByIds(productIds);
+
+  useDocumentTitle('Wishlist');
 
   const isEmpty = productIds.length === 0;
 
@@ -41,7 +44,7 @@ export function WishlistPage() {
           ) : (
             <>
               <div className="results-bar">
-                <span className="results-bar__count">
+                <span className="results-bar__count" role="status">
                   {isPending
                     ? 'Loading...'
                     : `${products?.length ?? 0} product${(products?.length ?? 0) === 1 ? '' : 's'}`}
@@ -54,12 +57,17 @@ export function WishlistPage() {
               <ul className="wishlist">
                 {products?.map((product) => (
                   <li className="wishlist__row" key={product.id}>
+                    {/* Mouse affordance only — same destination and name as
+                        the product-name link below, so it's kept out of the
+                        tab order and the accessibility tree. */}
                     <Link
                       to={`/products/${product.id}`}
                       className="wishlist__media"
+                      tabIndex={-1}
+                      aria-hidden="true"
                       onClick={() => trackProductClick(product)}
                     >
-                      <ProductImage product={product} />
+                      <ProductImage product={product} decorative />
                     </Link>
                     <div className="wishlist__info">
                       <p className="card__brand">{product.brand}</p>

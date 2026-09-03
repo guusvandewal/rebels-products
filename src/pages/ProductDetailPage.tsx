@@ -3,6 +3,7 @@ import { useAllProducts, useProduct } from '../api/products';
 import { ProductCard } from '../components/ProductCard';
 import { ProductImage } from '../components/ProductImage';
 import { WishlistButton } from '../components/WishlistButton';
+import { useDocumentTitle } from '../hooks/useDocumentTitle';
 
 function formatSpecKey(key: string): string {
   const spaced = key.replace(/([A-Z])/g, ' $1').toLowerCase();
@@ -12,6 +13,7 @@ function formatSpecKey(key: string): string {
 export function ProductDetailPage() {
   const params = useParams<{ id: string }>();
   const id = Number(params.id);
+  const isValidId = Number.isFinite(id);
   const { data: product, isPending, isError } = useProduct(id);
   const { data: allProducts } = useAllProducts();
 
@@ -20,6 +22,8 @@ export function ProductDetailPage() {
         ?.filter((other) => other.category === product.category && other.id !== product.id)
         .slice(0, 3)
     : undefined;
+
+  useDocumentTitle(product?.name ?? 'Product');
 
   return (
     <>
@@ -51,9 +55,13 @@ export function ProductDetailPage() {
 
       <section className="section">
         <div className="section__inner">
-          {isPending && <p className="results-bar__count">Loading...</p>}
+          {isValidId && isPending && (
+            <p className="results-bar__count" role="status">
+              Loading...
+            </p>
+          )}
 
-          {!isPending && (isError || !product) && (
+          {(!isValidId || (!isPending && (isError || !product))) && (
             <div className="empty-state">
               <h2>Product not found</h2>
               <p>This product doesn&apos;t exist or the API isn&apos;t running.</p>
@@ -99,7 +107,7 @@ export function ProductDetailPage() {
             <hr className="rule" />
             <div className="grid">
               {related.map((other) => (
-                <ProductCard key={other.id} product={other} />
+                <ProductCard key={other.id} product={other} headingLevel={3} />
               ))}
             </div>
           </div>
